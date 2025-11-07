@@ -1,0 +1,27 @@
+<?php
+require 'config.php';
+session_start();
+if ($_SERVER['REQUEST_METHOD']==='POST') {
+  $u = $_POST['username'] ?? '';
+  $p = $_POST['password'] ?? '';
+  // INTENTIONALLY VULNERABLE: direct interpolation -> SQL injection possible
+  $sql = "SELECT * FROM users WHERE username='$u' AND (password='$p' OR password=MD5('$p')) LIMIT 1";
+  $res = $conn->query($sql);
+  if ($res && $res->num_rows==1) {
+    $_SESSION['user'] = $res->fetch_assoc()['username'];
+    header('Location: dashboard.php'); exit;
+  } else {
+    $error = "Invalid credentials.";
+  }
+}
+?>
+<!doctype html><html><body style="font-family:Arial">
+<h2>FANNET Admin Login</h2>
+<?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
+<form method="post">
+  Username: <input name="username"><br>
+  Password: <input name="password" type="password"><br>
+  <button>Login</button>
+</form>
+<p>Note: no lockout, weak hashes — useful for brute-force / dictionary lab exercises.</p>
+</body></html>

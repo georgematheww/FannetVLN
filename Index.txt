@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FANNET Gaming — Home</title>
+  <style>body{font-family:Arial;background:#0b0b12;color:#e6f7ff;text-align:center;padding:40px} .card{background:#071029;padding:20px;border-radius:8px;display:inline-block;width:600px} a{color:#7be3ff}</style>
+</head>
+<body>
+  <div class="card">
+    <h1>FANNET — Indie Game Studio</h1>
+    <p>Welcome to the FANNET test site (lab only).</p>
+    <ul style="text-align:left; display:inline-block;">
+      <li><a href="/fannet/login.php">Admin Login (vulnerable)</a></li>
+      <li><a href="/fannet/search.php">Game Catalog (SQLi demo)</a></li>
+      <li><a href="/fannet/about.html">About FANNET</a></li>
+    </ul>
+    <p style="font-size:0.85em;color:#b6e6ff;">ONLY for lab exercises. Do not expose this VM to the public internet.</p>
+  </div>
+</body>
+</html>

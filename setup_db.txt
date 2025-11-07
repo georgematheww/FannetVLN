@@ -1,0 +1,28 @@
+<?php
+require 'config.php';
+
+// users table (intentionally weak storage)
+$conn->query("CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(100),
+  password VARCHAR(255),
+  fullname VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+$conn->query("INSERT IGNORE INTO users (id,username,password,fullname) VALUES
+(1,'admin','password123','FANNET Admin'),
+(2,'player1',MD5('letmein'),'Player One')");
+
+// games table
+$conn->query("CREATE TABLE IF NOT EXISTS games (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255),
+  description TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+$conn->query("INSERT IGNORE INTO games (id,name,description) VALUES
+(1,'Neon Runner','Fast arcade runner'),
+(2,'Castle Siege','Multiplayer tower defense')");
+
+echo 'DB setup complete. Now DELETE or RENAME setup_db.php for safety.';
+?>

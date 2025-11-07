@@ -1,0 +1,16 @@
+<?php
+require 'config.php';
+$q = $_GET['q'] ?? '';
+$rows = [];
+if ($q !== '') {
+  // INTENTIONALLY VULNERABLE: no escaping, used for SQLi demos
+  $sql = "SELECT * FROM games WHERE name LIKE '%$q%'";
+  $res = $conn->query($sql);
+  if ($res) while ($r = $res->fetch_assoc()) $rows[] = $r;
+}
+?>
+<!doctype html><html><body style="font-family:Arial">
+<h2>Game Catalog Search</h2>
+<form><input name="q" value="<?php echo htmlentities($q); ?>"><button>Search</button></form>
+<?php if ($rows): foreach ($rows as $r) echo "<div><strong>".htmlentities($r['name'])."</strong>: ".htmlentities($r['description'])."</div>"; endif; ?>
+</body></html>
