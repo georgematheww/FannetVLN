@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FANNET Gaming — Home</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Font Setup (Inter for modern look) */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background-color: #0c0c14; /* Slightly darker background for contrast */
+        }
+
+        /* Define the new primary accent color: Neon Cyan (from CyberDrift) */
+        .neon-cyan {
+            color: #7be3ff; 
+        }
+        .neon-glow-text {
+            text-shadow: 0 0 10px rgba(123, 227, 255, 0.9);
+        }
+        .neon-glow-border {
+            box-shadow: 0 0 15px rgba(123, 227, 255, 0.4);
+        }
+        
+        /* Apply subtle animation to game cards on hover */
+        .game-card {
+            transition: all 0.5s ease-in-out;
+        }
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #7be3ff; border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: #1a1a2e; }
+        
+        /* Custom class for the hero section background */
+        .hero-bg-image {
+            /* Kept the Apex Strike image, but darkened the overlay below for the neon theme */
+            background-image: url('http://googleusercontent.com/image_collection/image_retrieval/7309356753794257880');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Custom class for the CyberDrift card background (already using this) */
+        .cyberdrift-bg-image {
+            background-image: url('http://googleusercontent.com/image_collection/image_retrieval/5723321865751528128');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="text-gray-100 antialiased pt-20">
+    
+    <!-- Task Bar (Navigation) -->
+    <nav class="fixed top-0 left-0 w-full bg-[#15151f]/95 backdrop-blur-md z-50 shadow-xl border-b border-cyan-400/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo/Brand -->
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-3xl font-black neon-cyan neon-glow-text uppercase tracking-widest">FANNET</a>
+                </div>
+                
+                <!-- Desktop Navigation Links -->
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-10 items-center">
+                    <a href="#" class="text-gray-300 hover:neon-cyan px-3 py-2 rounded-md text-sm font-bold uppercase transition duration-200 tracking-wider">Home</a>
+                    <a href="#games" class="text-gray-300 hover:neon-cyan px-3 py-2 rounded-md text-sm font-bold uppercase transition duration-200 tracking-wider">Our Titles</a>
+                    <a href="/fannet/about.html" class="text-gray-300 hover:neon-cyan px-3 py-2 rounded-md text-sm font-bold uppercase transition duration-200 tracking-wider">About Us</a>
+
+                    <!-- Login Button -->
+                    <a href="/fannet/login.php" class="bg-cyan-500 text-[#0c0c14] px-5 py-2 rounded-lg text-sm font-bold shadow-2xl shadow-cyan-500/50 hover:bg-cyan-400 transition duration-300 hover:scale-105 ml-6">
+                        PLAYER LOGIN
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content - Hero Section (Now featuring APEX STRIKE with background image) -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        
+        <!-- Game Introduction/Hero (APEX STRIKE) -->
+        <section id="hero" class="relative hero-bg-image rounded-2xl overflow-hidden p-8 md:p-24 border-2 border-cyan-500/50 neon-glow-border shadow-2xl shadow-cyan-800/20">
+            
+            <!-- Dark overlay for text readability -->
+            <div class="absolute inset-0 bg-black opacity-70 z-0"></div>
+
+            <div class="relative z-10 max-w-5xl mx-auto text-center">
+                <p class="text-lg uppercase tracking-[0.3em] text-cyan-400 font-bold mb-4">THE WARZONE AWAITS</p>
+                
+                <h2 class="text-7xl md:text-[8rem] font-black mb-6 leading-none">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-400 neon-glow-text">
+                        APEX <span class="neon-cyan">STRIKE</span>
+                    </span>
+                </h2>
+                
+                <p class="text-2xl text-gray-300 max-w-4xl mx-auto mb-10 font-medium">
+                    Dominate the battlefield. Engage in high-stakes, realistic combat across vast, destructible global theaters. Your squad is your weapon.
+                </p>
+
+                <!-- Primary Action Button -->
+                <a href="#games" class="inline-flex items-center justify-center px-10 py-4 border-4 border-cyan-600 text-lg font-black rounded-full text-[#0c0c14] bg-cyan-500 hover:bg-cyan-400 transition duration-300 neon-glow-border hover:scale-105 uppercase tracking-wider shadow-lg shadow-cyan-600/50">
+                    Play Now
+                </a>
+            </div>
+        </section>
+
+        <!-- Product Titles Showcase Section -->
+        <section id="games" class="py-24">
+            <h3 class="text-5xl font-black text-center mb-16 text-white uppercase tracking-wider border-b-4 border-cyan-500/50 inline-block px-8 pb-3">FANNET TITLES</h3>
+            
+            <div class="space-y-16 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-16">
+                
+                <!-- Game Card 1: APEX STRIKE (FPS - Primary Focus) -->
+                <div class="game-card bg-[#15151f] p-8 rounded-2xl border border-cyan-500/50 shadow-xl shadow-cyan-900/30">
+                    <p class="text-xs uppercase tracking-widest text-cyan-400 font-bold mb-2">Tactical / FPS</p>
+                    <h4 class="text-4xl font-black text-white mb-4">APEX STRIKE</h4>
+                    <p class="text-gray-400 mb-6">The next generation of tactical team-based combat. Master diverse classes and dynamic map destruction in a relentless warzone.</p>
+                    
+                    <h5 class="text-lg font-semibold text-white mb-3 border-b border-gray-700 pb-2">KEY FEATURES</h5>
+                    <ul class="space-y-2 text-left text-gray-300 text-sm">
+                        <li class="flex items-start"><span class="neon-cyan mr-3 font-extrabold text-xl">&gt;</span> Global Ranked Matchmaking &amp; Leagues</li>
+                        <li class="flex items-start"><span class="neon-cyan mr-3 font-extrabold text-xl">&gt;</span> Advanced Operator Class System</li>
+                        <li class="flex items-start"><span class="neon-cyan mr-3 font-extrabold text-xl">&gt;</span> Dynamic Environment Destruction</li>
+                    </ul>
+                    <button class="w-full mt-8 bg-cyan-500 text-[#0c0c14] py-3 rounded-lg text-lg font-bold hover:bg-cyan-400 transition duration-300 hover:scale-[1.02] shadow-md shadow-cyan-500/50">
+                        GET THE GAME
+                    </button>
+                </div>
+
+                <!-- Game Card 2: CYBERDRIFT: ZERO (Racer - Secondary Focus with background image) -->
+                <div class="game-card relative overflow-hidden rounded-2xl border border-cyan-400/50 shadow-xl shadow-cyan-900/30">
+                    <!-- Background Image -->
+                    <div class="absolute inset-0 cyberdrift-bg-image"></div>
+                    <!-- Dark/Neon Gradient Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                    
+                    <div class="relative z-10 p-8">
+                        <p class="text-xs uppercase tracking-widest text-cyan-400 font-bold mb-2">Arcade / Racing</p>
+                        <h4 class="text-4xl font-black text-white mb-4">CYBERDRIFT: ZERO</h4>
+                        <p class="text-gray-300 mb-6">A high-speed, open-world cyberpunk racing experience where skill and hacking prowess determine the champion.</p>
+                        
+                        <h5 class="text-lg font-semibold text-white mb-3 border-b border-gray-700 pb-2">KEY FEATURES</h5>
+                        <ul class="space-y-2 text-left text-gray-200 text-sm">
+                            <li class="flex items-start"><span class="neon-cyan mr-3 font-extrabold text-xl">&gt;</span> Deep Vehicle Customization</li>
+                            <li class="flex items-start"><span class="neon-cyan mr-3 font-extrabold text-xl">&gt;</span> Massive Open Grid Exploration</li>
+                            <li class="flex items-start"><span class="neon-cyan mr-3 font-extrabold text-xl">&gt;</span> Competitive Multiplayer Arenas</li>
+                        </ul>
+                        <button class="w-full mt-8 bg-cyan-500 text-[#0c0c14] py-3 rounded-lg text-lg font-bold hover:bg-cyan-400 transition duration-300 hover:scale-[1.02] shadow-md shadow-cyan-500/50">
+                            Download Demo
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- Site Footer -->
+    <footer class="bg-[#15151f] py-6 border-t border-gray-700">
+        <div class="text-center text-sm text-gray-500">
+            &copy; 2025 FANNET. All rights reserved. | <a href="#" class="hover:text-cyan-500">Privacy Policy</a>
+        </div>
+    </footer>
+
+</body>
+</html>
