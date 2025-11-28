@@ -1,0 +1,14 @@
+<VirtualHost *:80>
+    ServerName 10.255.40.21
+
+    ProxyPreserveHost On
+
+    ProxyPass "/" "http://10.255.40.10/fannet/"
+    ProxyPassReverse "/" "http://10.255.40.10/fannet/"
+
+    # Enable ModSecurity
+    SecRuleEngine On
+
+    ErrorLog ${APACHE_LOG_DIR}/revproxy_error.log
+    CustomLog ${APACHE_LOG_DIR}/revproxy_access.log combined
+</VirtualHost>
