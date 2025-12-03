@@ -1,0 +1,55 @@
+{
+  "description": "Parse ModSecurity audit logs into ECS fields",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "\\[%{DATA:modsec_timestamp}\\] %{DATA:waf.transaction_id} %{DATA:waf.action} %{DATA:waf.rule.id}: %{DATA:waf.rule.message} %{GREEDYDATA:waf.matched_data}"
+        ],
+        "ignore_missing": true
+      }
+    },
+    {
+      "date": {
+        "field": "modsec_timestamp",
+        "target_field": "@timestamp",
+        "formats": ["yyyy-MM-dd HH:mm:ss"]
+      }
+    },
+    {
+      "set": {
+        "field": "event.module",
+        "value": "modsecurity"
+      }
+    },
+    {
+      "set": {
+        "field": "event.dataset",
+        "value": "waf.audit"
+      }
+    },
+    {
+      "rename": {
+        "field": "client_ip",
+        "target_field": "source.ip",
+        "ignore_missing": true
+      }
+    }
+  ]
+}
+
+
+
+--------------------------
+
+
+curl -k -u elastic:x3ajIc3ToM*+aRYt=Zgp -X PUT "https://10.255.70.10:9200/_ingest/pipeline/waf-modsec-pipeline" \
+-H "Content-Type: application/json" \
+--data-binary @/tmp/waf-modsec-pipeline.json
+
+
+
+--------------
+
+curl -k -u elastic:x3ajIc3ToM*+aRYt=Zgp "https://10.255.70.10:9200/_ingest/pipeline/waf-modsec-pipeline?pretty"
