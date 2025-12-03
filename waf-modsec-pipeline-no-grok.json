@@ -1,0 +1,33 @@
+{
+  "description": "Parse ModSecurity audit logs (JSON format - Grok Removed)",
+  "processors": [
+    /* --- GROK PROCESSOR REMOVED HERE --- */
+    {
+      "date": {
+        "field": "[modsecurity][transaction][time]", 
+        "target_field": "@timestamp",
+        "formats": ["yyyy-MM-dd HH:mm:ss"],
+        "ignore_failure": true
+      }
+    },
+    {
+      "set": {
+        "field": "event.module",
+        "value": "modsecurity"
+      }
+    },
+    {
+      "set": {
+        "field": "event.dataset",
+        "value": "waf.audit"
+      }
+    },
+    {
+      "rename": {
+        "field": "[modsecurity][remote_address]",
+        "target_field": "source.ip",
+        "ignore_missing": true
+      }
+    }
+  ]
+}
