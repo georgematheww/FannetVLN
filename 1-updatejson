@@ -1,0 +1,64 @@
+# ============================== Filebeat Inputs ===============================
+
+filebeat.inputs:
+# 1. ModSecurity JSON Log Input (CORRECTED SETUP)
+- type: filestream  # Recommended input type for new setups
+  # --- CRITICAL: Link to your custom Elasticsearch pipeline ---
+  pipeline: waf-modsec-pipeline 
+  enabled: true
+  paths:
+    # --- CRITICAL: Use the correct JSON file path ---
+    - /var/log/apache2/modsec_audit.json 
+  
+  fields:
+    stream: waf_logs
+    fields_under_root: true
+
+  # CRITICAL: This processor decodes the single-line JSON log 
+  # and puts the structured data under the 'modsecurity' field.
+  processors:
+    - decode_json_fields:
+        fields: ["message"]
+        target: "modsecurity"
+        overwrite_keys: true
+        
+# 2. Apache Access/Error Log Input (Your existing logs)
+- type: log
+  enabled: true
+  paths:
+    - /var/log/apache2/access.log
+    - /var/log/apache2/error.log
+  fields:
+    stream: apache_logs
+    fields_under_root: true
+
+# ======================= Elasticsearch output ================================
+
+output.elasticsearch:
+  hosts: ["https://10.255.70.10:9200"]
+  username: "elastic"
+  password: "x3ajIc3ToM*+aRYt=Zgp"
+  ssl.verification_mode: none  
+  index: "waf-logs-%{+yyyy.MM.dd}" 
+
+# ============================== Index Management =============================
+
+setup.template.enabled: true
+setup.template.name: "waf-logs"
+setup.template.pattern: "waf-logs-*"
+
+# ============================== Logging ======================================
+
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat.log
+  keepfiles: 7
+  rotateeverybytes: 10485760 # 10MB
+
+# ============================== Processors ===================================
+
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
