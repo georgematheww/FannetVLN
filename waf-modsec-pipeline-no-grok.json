@@ -31,3 +31,10 @@
     }
   ]
 }
+
+-----------------
+
+# Execute this command to update the pipeline on your Elasticsearch host
+curl -k -u elastic:x3aJic3ToM*+aRYt=Zgp -X PUT "https://10.255.70.10:9200/_ingest/pipeline/waf-modsec-pipeline" \
+-H "Content-Type: application/json" \
+--data-binary @/tmp/waf-modsec-pipeline-no-grok.json
