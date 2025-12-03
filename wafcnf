@@ -1,0 +1,50 @@
+# ============================== Filebeat inputs ===============================
+
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/apache2/modsec_audit.log
+    fields:
+      stream: waf_logs         # custom field to identify WAF stream
+    fields_under_root: true
+
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/apache2/access.log
+      - /var/log/apache2/error.log
+    fields:
+      stream: apache_logs      # custom field for Apache logs
+    fields_under_root: true
+
+# ======================= Elasticsearch output ================================
+
+output.elasticsearch:
+  hosts: ["https://10.255.70.10:9200"]
+  username: "elastic"
+  password: "x3ajIc3ToM*+aRYt=Zgp"
+  ssl.verification_mode: none   # disable if using self-signed certs in lab
+  index: "waf-logs-%{+yyyy.MM.dd}"   # dedicated daily index for WAF logs
+
+# ============================== Index Management =============================
+
+setup.template.enabled: true
+setup.template.name: "waf-logs"
+setup.template.pattern: "waf-logs-*"
+
+# ============================== Logging ======================================
+
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat.log
+  keepfiles: 7
+  rotateeverybytes: 10485760 # 10MB
+
+# ============================== Processors ===================================
+
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
