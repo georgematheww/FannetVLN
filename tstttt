@@ -1,0 +1,42 @@
+agent:
+  monitoring:
+    enabled: true
+    http:
+      host: "localhost"
+      port: 6790
+
+outputs:
+  default:
+    type: elasticsearch
+    hosts: ["https://10.255.70.10:9200"]
+    username: "elastic"
+    password: "x3ajIc3ToM*+aRYt=Zgp"
+    preset: balanced
+
+inputs:
+  # Collect Windows Event Logs
+  - type: winlog
+    streams:
+      - event_logs:
+          - name: Application
+          - name: Security
+          - name: System
+          - name: Directory Service
+          - name: DNS Server
+          - name: DFS Replication
+
+  # Collect basic system metrics
+  - type: system/metrics
+    streams:
+      - metricset: cpu
+      - metricset: memory
+      - metricset: network
+      - metricset: disk
+
+# Optional: Enable Elastic Agent monitoring API
+agent:
+  monitoring:
+    enabled: true
+    http:
+      host: "localhost"
+      port: 6790
