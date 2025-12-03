@@ -1,0 +1,47 @@
+agent:
+  monitoring:
+    http:
+      enabled: true
+      host: localhost
+      port: 6790
+
+outputs:
+  default:
+    type: elasticsearch
+    hosts: ["https://10.255.70.10:9200"]
+    username: "elastic"
+    password: "x3ajIc3ToM*+aRYt=Zgp"
+    ssl.verification_mode: none   # remove if you use proper TLS
+
+inputs:
+  - id: windows-logs
+    type: winlog
+    use_output: default
+    streams:
+      - name: Application
+        event_logs:
+          - name: Application
+      - name: Security
+        event_logs:
+          - name: Security
+      - name: System
+        event_logs:
+          - name: System
+      - name: DirectoryService
+        event_logs:
+          - name: "Directory Service"
+      - name: DNS
+        event_logs:
+          - name: "DNS Server"
+      - name: DFSR
+        event_logs:
+          - name: "DFS Replication"
+
+  - id: system-metrics
+    type: system/metrics
+    use_output: default
+    streams:
+      - metricset: cpu
+      - metricset: memory
+      - metricset: network
+      - metricset: disk
