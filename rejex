@@ -1,0 +1,12 @@
+[Definition]
+# Fail2ban filter for Suricata fast.log human-readable alerts.
+# Matches lines like:
+# [**] [1:2210004:3] SURICATA STREAM 3way handshake SYNACK resend with different ack {TCP} 10.255.40.21:80 > 10.255.200.5:24980
+
+# match if attacker is the left IP (SRC)
+failregex = \[.*\]\s+\[\*\*\]\s+\[\d+:\d+:\d+\]\s+.*SURICATA.*\{TCP\}\s+<HOST>:\d+\s+>\s+\d+\.\d+\.\d+\.\d+:\d+
+
+# match if attacker is the right IP (DST)
+            \[.*\]\s+\[\*\*\]\s+\[\d+:\d+:\d+\]\s+.*SURICATA.*\{TCP\}\s+\d+\.\d+\.\d+\.\d+:\d+\s+>\s+<HOST>:\d+
+
+ignoreregex =
