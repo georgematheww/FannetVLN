@@ -1,0 +1,25 @@
+sudo nano /etc/fail2ban/filter.d/suricata.conf
+
+
+[Definition]
+# Fail2ban filter for Suricata fast.log alerts
+failregex = .* \[Classification: .*] .* {.*} <HOST>:.*>
+ignoreregex =
+
+
+sudo nano /etc/fail2ban/jail.local
+
+
+[suricata]
+enabled = true
+filter = suricata
+logpath = /var/log/suricata/fast.log
+backend = auto
+maxretry = 5
+findtime = 60
+bantime = 300
+action = iptables-multiport[name=suricata, port="80,443,22", protocol=tcp]
+
+
+sudo systemctl restart fail2ban
+sudo systemctl status fail2ban
