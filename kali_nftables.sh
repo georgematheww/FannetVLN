@@ -215,3 +215,90 @@ table ip nat {
         oifname "eth3" masquerade
     }
 }
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+flush ruleset
+
+table inet firewall {
+    set blacklist {
+        type ipv4_addr
+        flags dynamic
+        timeout 5m
+    }
+
+    chain input {
+        type filter hook input priority 0;
+        policy drop;
+
+        iif "lo" accept
+        ct state established,related accept
+        ip saddr @blacklist drop
+
+        # SYN flood protection
+        tcp flags & (fin|syn|rst|ack) == syn limit rate 50/second accept
+        tcp flags & (fin|syn|rst|ack) == syn drop
+
+        # ICMP rate limiting
+        ip protocol icmp limit rate 5/second accept
+    }
+
+    chain forward {
+        type filter hook forward priority 0;
+        policy drop;
+
+        ip saddr @blacklist drop
+        ct state established,related accept
+
+        # Outside -> WAF (HTTP/HTTPS)
+        iifname "eth3" ip daddr 10.255.40.21 tcp dport {80,443} ct state new accept
+
+        # Block outside -> backend directly
+        iifname "eth3" ip daddr 10.255.40.10 drop
+
+        # Allow WAF -> backend (HTTP/HTTPS)
+        iifname "eth2" ip saddr 10.255.40.21 ip daddr 10.255.40.10 tcp dport {80,443} accept
+
+        # Allow DMZ router subnet -> outside
+        iifname "eth2" oifname "eth3" accept
+    }
+
+    chain output {
+        type filter hook output priority 0;
+        policy accept;
+    }
+}
+
+table ip nat {
+    chain prerouting {
+        type nat hook prerouting priority -100;
+        policy accept;
+
+        # DNAT external requests to WAF
+        iifname "eth3" tcp dport {80,443} dnat to 10.255.40.21
+    }
+
+    chain postrouting {
+        type nat hook postrouting priority 100;
+        policy accept;
+
+        # SNAT replies from WAF back to outside
+        oifname "eth3" ip saddr 10.255.40.21 snat to 10.255.90.1
+
+        # Masquerade general outbound traffic
+        oifname "eth3" masquerade
+        oifname "eth2" masquerade
+    }
+}
