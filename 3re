@@ -1,0 +1,5 @@
+failregex = \[1:2210063:.*\]\s+SURICATA STREAM 3way handshake excessive different SYNs.*{TCP}\s+<HOST>:
+ignoreregex =
+
+failregex = \[1:2210063:.*\]\s+SURICATA STREAM 3way handshake excessive different SYNs.*{TCP}\s+<HOST>:
+ignoreregex =
