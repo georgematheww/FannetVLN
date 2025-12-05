@@ -18,13 +18,14 @@ sysctl -w net.ipv4.ip_forward=1
 grep -q "ip_forward" /etc/sysctl.conf || echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 
 # -------------------------
-# Install nftables + fail2ban
+# Install nftables + Fail2ban + Suricata
 # -------------------------
-echo "[*] Installing nftables and fail2ban..."
+echo "[*] Installing nftables, fail2ban, suricata..."
 apt update
-apt install -y nftables fail2ban
+apt install -y nftables fail2ban suricata
 systemctl enable --now nftables
 systemctl enable --now fail2ban
+systemctl enable --now suricata
 
 # -------------------------
 # Kernel hardening / DDoS protection
@@ -107,9 +108,9 @@ EOF
 systemctl restart nftables
 
 # -------------------------
-# Fail2ban setup
+# Fail2ban setup (Suricata)
 # -------------------------
-# Action for nftables
+echo "[*] Configuring Fail2ban for Suricata..."
 cat <<EOF >/etc/fail2ban/action.d/nftables.conf
 [Definition]
 actionstart =
@@ -119,29 +120,26 @@ actionban = /usr/sbin/nft add element inet firewall blacklist { <ip> }
 actionunban = /usr/sbin/nft delete element inet firewall blacklist { <ip> }
 EOF
 
-# Example HTTP abuse filter
-cat <<EOF >/etc/fail2ban/filter.d/http-get-dos.conf
+cat <<EOF >/etc/fail2ban/filter.d/suricata.conf
 [Definition]
-failregex = ^<HOST> - - \[.*\] "((GET|POST|HEAD) .*)"
+failregex = .*{.*} <HOST>:.*>
 ignoreregex =
 EOF
 
-# Jail configuration
-cat <<EOF >/etc/fail2ban/jail.d/http-dos.local
+cat <<EOF >/etc/fail2ban/jail.d/suricata.local
 [DEFAULT]
 ignoreip = 127.0.0.1/8
 bantime  = 5m
-findtime = 600
-maxretry = 50
+findtime = 60
+maxretry = 1
 
-[http-get-dos]
+[suricata]
 enabled = true
-port = http
-filter = http-get-dos
-logpath = /var/log/apache2/access.log
-action = nftables[name=HTTPDOS]
+filter = suricata
+logpath = /var/log/suricata/fast.log
+action = nftables[name=SURICATA]
 EOF
 
 systemctl restart fail2ban
 
-echo "[*] Kali1 firewall + nftables + Fail2ban setup complete."
+echo "[*] Kali1 perimeter firewall + nftables + Fail2ban (Suricata) setup complete."
